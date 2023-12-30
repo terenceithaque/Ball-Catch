@@ -1,7 +1,11 @@
 # Script principal du jeu
 import pygame # Importer le module pygame
 from joueur import * # Importer toutes les propriétés provenant du fichier joueur.py
+from tkinter import messagebox
 pygame.init() # Initialiser pygame
+
+
+
 
 
 largeur_ecran = 800 # Largeur maximale de la fenêtre de jeu
@@ -14,11 +18,20 @@ joueur = Joueur(screen=ecran) # Créer un nouveau joueur
 
 execution = True # On crée une variable pour tenir compte de l'état de l'exécution du jeu
 
+def demander_quitter():
+    "Demander au joueur s'il souhaite quitter le jeu"
+    quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ?")
+    if quit == "yes":
+        global execution
+        execution = False
+
 while execution: # Tant que le jeu est en cours d'exécution
 
+    touches = pygame.key.get_pressed() # Obtenir toutes les touches pressées par le joueur pendant l'exécution du jeu
+
     for evenement in pygame.event.get(): # On intercèpte tous les évènements qui ont lieu pendant l'exécution du jeu
-        if evenement.type == pygame.QUIT: # Si le joueur veut quitter le jeu
-            execution = False # Dans ce cas on arrête l'exécution du jeu
+        if evenement.type == pygame.QUIT or touches[pygame.K_ESCAPE]: # Si le joueur veut quitter le jeu
+            demander_quitter() # On demande au joueur de confirmer la fin de la partie
 
     joueur.draw()  # Dessiner le joueur à l'écran
 
