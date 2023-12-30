@@ -18,6 +18,23 @@ class Joueur(pygame.sprite.Sprite):
 
         self.screen = screen # Surface sur laquelle on affichera le joueur
 
+
+    def mettre_a_jour_pos(self, touche):
+        "Mettre à jour la position de la raquette du joueur"
+        if touche[pygame.K_LEFT]: # Si le joueur presse la touche "flèche vers la gauche"
+            self.rect.x -= 2 # Metttre à jour la position x de la raquette de manière à la déplacer vers la gauche
+            #print("Position x actuelle du joueur :", self.rect.x)
+            if self.rect.x < 0: # On doit vérifier à chaque déplacement que la raquette ne sort pas de l'écran
+                self.rect.x = 0 # Et si c'est le cas, alors on la replace sur l'écran
+
+        if touche[pygame.K_RIGHT]: # Si le joueur presse la touche "flèche vers la droite"
+            self.rect.x += 2 # Mettre à jour la position de la raquette de manière à la déplacer vers la droite
+            #print("Position x actuelle du joueur :", self.rect.x)
+            if self.rect.x > 750: # On doit vérifier à chaque déplacement que la raquette ne sort pas de l'écran
+                self.rect.x = 750  # Et si c'est le cas, alors on la replace sur l'écran
+
+
     def draw(self):
         "Dessiner le joueur à l'écran"
+        self.screen.fill((0, 0, 0))
         self.screen.blit(self.image, (self.rect.x, self.rect.y))    

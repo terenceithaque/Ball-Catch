@@ -20,10 +20,10 @@ execution = True # On crée une variable pour tenir compte de l'état de l'exéc
 
 def demander_quitter():
     "Demander au joueur s'il souhaite quitter le jeu"
-    quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ?")
-    if quit == "yes":
+    quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ?") # On affiche une boîte de dialogue pour demander au joueur de confirmer la fin de la partie
+    if quit == "yes": # Si le joueur clique sur "Oui"
         global execution
-        execution = False
+        execution = False # Alors on arrête l'exécution du jeu
 
 while execution: # Tant que le jeu est en cours d'exécution
 
@@ -32,6 +32,8 @@ while execution: # Tant que le jeu est en cours d'exécution
     for evenement in pygame.event.get(): # On intercèpte tous les évènements qui ont lieu pendant l'exécution du jeu
         if evenement.type == pygame.QUIT or touches[pygame.K_ESCAPE]: # Si le joueur veut quitter le jeu
             demander_quitter() # On demande au joueur de confirmer la fin de la partie
+
+    joueur.mettre_a_jour_pos(touches)        
 
     joueur.draw()  # Dessiner le joueur à l'écran
 
