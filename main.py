@@ -18,6 +18,22 @@ joueur = Joueur(screen=ecran) # Créer un nouveau joueur
 
 execution = True # On crée une variable pour tenir compte de l'état de l'exécution du jeu
 
+pause = False # On crée une variable pour savoir si le jeu est en pause on non
+
+def mettre_pause():
+    "Mettre le jeu en pause"
+    global pause
+    if pause == False: # Si le jeu n'est pas en pause
+        pause_font = pygame.font.Font(None, 30)
+        texte_pause = "Pause ! (Touche Espace pour reprendre)"
+        pause = True 
+        ecran.blit(pause_font.render(texte_pause, True, (255, 255, 255)), (0,50))
+        pygame.display.update()
+        
+
+    else:
+        pause = False   
+
 def demander_quitter():
     "Demander au joueur s'il souhaite quitter le jeu"
     quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ?") # On affiche une boîte de dialogue pour demander au joueur de confirmer la fin de la partie
@@ -33,8 +49,14 @@ while execution: # Tant que le jeu est en cours d'exécution
         if evenement.type == pygame.QUIT or touches[pygame.K_ESCAPE]: # Si le joueur veut quitter le jeu
             demander_quitter() # On demande au joueur de confirmer la fin de la partie
 
-    joueur.mettre_a_jour_pos(touches)        
+        if touches[pygame.K_SPACE]:
+            mettre_pause() 
 
-    joueur.draw()  # Dessiner le joueur à l'écran
 
-    pygame.display.flip()
+    if not pause:           
+
+        joueur.mettre_a_jour_pos(touches)        
+
+        joueur.draw()  # Dessiner le joueur à l'écran
+
+        pygame.display.flip()
