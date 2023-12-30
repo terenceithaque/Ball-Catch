@@ -1,6 +1,7 @@
 # Script principal du jeu
 import pygame # Importer le module pygame
 from joueur import * # Importer toutes les propriétés provenant du fichier joueur.py
+from balle import * # Importer toutes les propriétés provenant du fichier balle.py
 from tkinter import messagebox
 pygame.init() # Initialiser pygame
 
@@ -15,6 +16,7 @@ ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran)) # Créer l'écra
 pygame.display.set_caption("Ball-Catch")
 
 joueur = Joueur(screen=ecran) # Créer un nouveau joueur
+balle = Balle(screen=ecran)
 
 execution = True # On crée une variable pour tenir compte de l'état de l'exécution du jeu
 
@@ -55,8 +57,12 @@ while execution: # Tant que le jeu est en cours d'exécution
 
     if not pause:           
 
-        joueur.mettre_a_jour_pos(touches)        
+        joueur.mettre_a_jour_pos(touches)   
+
+        balle.fall()     
 
         joueur.draw()  # Dessiner le joueur à l'écran
+
+        balle.draw()
 
         pygame.display.flip()
