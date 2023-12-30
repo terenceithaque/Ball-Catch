@@ -6,9 +6,10 @@ class Joueur(pygame.sprite.Sprite):
     def __init__(self, screen):
         super().__init__() # On hérite des attributs de la classe Sprite
         self.image = pygame.Surface((10, 60))
+        self.image = pygame.transform.rotate(self.image, 90)
         self.image.fill((255,255,255))
-        self.x = 50 # Position x de départ du joueur
-        self.y = 100 # Position y de départ du joueur
+        self.x = 400 # Position x de départ du joueur
+        self.y = 500 # Position y de départ du joueur
 
         self.rect = self.image.get_rect() # Obtenir le rectangle de l'image du joueur
 
