@@ -3,6 +3,7 @@ import pygame # Importer le module pygame
 from joueur import * # Importer toutes les propriétés provenant du fichier joueur.py
 from balle import * # Importer toutes les propriétés provenant du fichier balle.py
 from tkinter import messagebox
+import random
 pygame.init() # Initialiser pygame
 
 
@@ -56,27 +57,27 @@ while execution: # Tant que le jeu est en cours d'exécution
             mettre_pause() 
 
 
-    if not pause:           
+    if not pause: 
+
+        ecran.fill((0,0,0))          
 
         joueur.mettre_a_jour_pos(touches)
+        joueur.draw()  # Dessiner le joueur à l'écran
+
         
-        for balle in balles:
+        for balle in list(balles):
             #print(balle)
             
             balle.fall()
             balle.draw()
             #ecran.fill((0,0,0))
             if balle.rect.y > 530:
-                balles.remove(balle)
-                balles.add(Balle(screen=ecran))
+                balles.remove(balle for balle in balles)
+                n_nouvelles_balles = random.randint(1, 3)
+                for i in range(n_nouvelles_balles):
+                    balles.add(Balle(screen=ecran))
 
         
             
            
-            
-     
-
-        joueur.draw()  # Dessiner le joueur à l'écran
-
-
-        pygame.display.flip()
+        pygame.display.update()

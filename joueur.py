@@ -36,5 +36,4 @@ class Joueur(pygame.sprite.Sprite):
 
     def draw(self):
         "Dessiner le joueur à l'écran"
-        self.screen.fill((0, 0, 0))
         self.screen.blit(self.image, (self.rect.x, self.rect.y))    

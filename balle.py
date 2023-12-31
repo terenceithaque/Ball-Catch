@@ -1,13 +1,14 @@
 # Balles que le joueur doit attraper
 import pygame
+import random
 
 class Balle(pygame.sprite.Sprite):
     "Balle"
     def __init__(self, screen):
         super().__init__()
-        self.image = pygame.Surface((20,25))
+        self.image = pygame.Surface((20,10))
         self.image.fill((255,255,255))
-        self.x = 120 # Position x initiale de la balle
+        self.x = random.randint(20, 400) # Position x initiale de la balle
         self.y = 20 # Position y initiale de la balle
 
         self.rect = self.image.get_rect() # Obtenir le rectangle de l'image de la balle
@@ -23,6 +24,5 @@ class Balle(pygame.sprite.Sprite):
 
     def draw(self):
         "Dessiner la balle à l'écran"
-        self.screen.fill((0,0,0))
+        #self.screen.fill((0,0,0))
         self.screen.blit(self.image, (self.rect.x, self.rect.y)) 
-        pygame.display.update()   
