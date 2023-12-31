@@ -16,7 +16,8 @@ ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran)) # Créer l'écra
 pygame.display.set_caption("Ball-Catch")
 
 joueur = Joueur(screen=ecran) # Créer un nouveau joueur
-balle = Balle(screen=ecran)
+balles = pygame.sprite.Group(Balle(screen=ecran))
+balles.add(Balle(screen=ecran))
 
 execution = True # On crée une variable pour tenir compte de l'état de l'exécution du jeu
 
@@ -57,12 +58,25 @@ while execution: # Tant que le jeu est en cours d'exécution
 
     if not pause:           
 
-        joueur.mettre_a_jour_pos(touches)   
+        joueur.mettre_a_jour_pos(touches)
+        
+        for balle in balles:
+            #print(balle)
+            
+            balle.fall()
+            balle.draw()
+            #ecran.fill((0,0,0))
+            if balle.rect.y > 530:
+                balles.remove(balle)
+                balles.add(Balle(screen=ecran))
 
-        balle.fall()     
+        
+            
+           
+            
+     
 
         joueur.draw()  # Dessiner le joueur à l'écran
 
-        balle.draw()
 
         pygame.display.flip()

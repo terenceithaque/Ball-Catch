@@ -5,7 +5,7 @@ class Balle(pygame.sprite.Sprite):
     "Balle"
     def __init__(self, screen):
         super().__init__()
-        self.image = pygame.Surface((11,5))
+        self.image = pygame.Surface((20,25))
         self.image.fill((255,255,255))
         self.x = 120 # Position x initiale de la balle
         self.y = 20 # Position y initiale de la balle
@@ -19,7 +19,10 @@ class Balle(pygame.sprite.Sprite):
     def fall(self):
         "La balle tombe"
         self.rect.y += 0.50
+        print(self.rect.y)
 
     def draw(self):
         "Dessiner la balle à l'écran"
-        self.screen.blit(self.image, (self.rect.x, self.rect.y))    
+        self.screen.fill((0,0,0))
+        self.screen.blit(self.image, (self.rect.x, self.rect.y)) 
+        pygame.display.update()   
