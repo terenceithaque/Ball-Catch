@@ -40,13 +40,15 @@ def mettre_pause():
 
 def demander_quitter():
     "Demander au joueur s'il souhaite quitter le jeu"
-    quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ?") # On affiche une boîte de dialogue pour demander au joueur de confirmer la fin de la partie
+    quit = messagebox.askquestion("Désirez-vous quitter le jeu ?", "Souhaitez-vous quitter le jeu maintenant ? Votre meilleur score est déjà sauvegardé.") # On affiche une boîte de dialogue pour demander au joueur de confirmer la fin de la partie
     if quit == "yes": # Si le joueur clique sur "Oui"
         global execution
         execution = False # Alors on arrête l'exécution du jeu
 
 while execution: # Tant que le jeu est en cours d'exécution
     joueur.sauvegarder_score() # On sauvegarde le score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
+    joueur.afficher_score() # Afficher le score du joueur à l'écran
+    
 
     touches = pygame.key.get_pressed() # Obtenir toutes les touches pressées par le joueur pendant l'exécution du jeu
 
@@ -59,6 +61,8 @@ while execution: # Tant que le jeu est en cours d'exécution
 
 
     if not pause: 
+        ecran.fill((0,0,0))
+        
 
         #ecran.fill((0,0,0))          
 
@@ -81,18 +85,17 @@ while execution: # Tant que le jeu est en cours d'exécution
                 balle.kill()
                 joueur.mettre_a_jour_score() # Mettre à jour le score du joueur
                 print("Score du joueur :", joueur.score)
-                
+
             if balle.rect.y > 530:
                 balle.kill()
                 n_nouvelles_balles = random.randint(1, 3)
-                for i in range(n_nouvelles_balles):
                 
-                    balles.add(Balle(x=random.randint(20, 400), screen=ecran))
+                balles.add(Balle(x=random.randint(20, 400), screen=ecran))
 
 
-                balles.clear(ecran, (0,0,0))    
+                #balles.clear(ecran, (0,0,0))    
 
         
             
            
-    pygame.display.update()
+    pygame.display.flip()

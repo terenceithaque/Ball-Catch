@@ -23,8 +23,15 @@ class Joueur(pygame.sprite.Sprite):
         self.fichier_score = "score.txt" # Fichier dans lequel le score du joueur est enregistré
 
         rf = open(self.fichier_score, "r") # Ouvrir le fichier du score en lecture
+        try:
+            self.meilleur_score = int(rf.read()) # Meilleur score du joueur
 
-        self.meilleur_score = int(rf.read()) # Meilleur score du joueur
+        except ValueError:
+            self.meilleur_score = 0    
+        
+
+        self.score_font = pygame.font.Font(None, 36)
+        self.meilleur_score_font = pygame.font.Font(None, 36)
 
 
     def mettre_a_jour_pos(self, touche):
@@ -53,9 +60,23 @@ class Joueur(pygame.sprite.Sprite):
         "Sauvegarder le meilleur score du joueur dans un fichier texte"
         with open(self.fichier_score, "w") as wf: # Ouvrir le fichier texte contenant le score en écriture
             wf.write(str(self.meilleur_score)) # Ecrire le meilleur score du joueur dans le fichier texte
-            wf.close()      
+            wf.close()
+
+
+    def afficher_score(self):
+        "Afficher le score du joueur"
+        str_score = str(self.score)  # Convertir le score actuel du joueur en chaine de caractères
+        score_text = self.score_font.render(f"Score : {str_score}", True, (255, 255, 255))
+
+        str_meilleur_score = str(self.meilleur_score)
+        meilleur_score_text = self.meilleur_score_font.render(f"Meilleur : {str_meilleur_score}", True, (255, 255, 255))
+
+
+        self.screen.blit(score_text, (20, 20))
+        self.screen.blit(meilleur_score_text, (20, 40))
+        pygame.display.update()        
 
 
     def draw(self):
         "Dessiner le joueur à l'écran"
-        self.screen.blit(self.image, (self.rect.x, self.rect.y))    
+        self.screen.blit(self.image, (self.rect.x, self.rect.y)) 
