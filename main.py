@@ -17,8 +17,8 @@ ecran = pygame.display.set_mode((largeur_ecran, hauteur_ecran)) # Créer l'écra
 pygame.display.set_caption("Ball-Catch")
 
 joueur = Joueur(screen=ecran) # Créer un nouveau joueur
-balles = pygame.sprite.Group(Balle(screen=ecran))
-balles.add(Balle(screen=ecran))
+balles = pygame.sprite.Group(Balle(x=random.randint(20, 400), screen=ecran))
+balles.add(Balle(x=random.randint(20,400), screen=ecran))
 
 execution = True # On crée une variable pour tenir compte de l'état de l'exécution du jeu
 
@@ -46,6 +46,7 @@ def demander_quitter():
         execution = False # Alors on arrête l'exécution du jeu
 
 while execution: # Tant que le jeu est en cours d'exécution
+    joueur.sauvegarder_score() # On sauvegarde le score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
 
     touches = pygame.key.get_pressed() # Obtenir toutes les touches pressées par le joueur pendant l'exécution du jeu
 
@@ -59,25 +60,39 @@ while execution: # Tant que le jeu est en cours d'exécution
 
     if not pause: 
 
-        ecran.fill((0,0,0))          
+        #ecran.fill((0,0,0))          
 
-        joueur.mettre_a_jour_pos(touches)
-        joueur.draw()  # Dessiner le joueur à l'écran
+        
 
         
         for balle in list(balles):
+            balle.clear()
+            joueur.mettre_a_jour_pos(touches)
+            joueur.draw()  # Dessiner le joueur à l'écran
+            
             #print(balle)
+
             
             balle.fall()
             balle.draw()
             #ecran.fill((0,0,0))
+
+            if balle.rect.colliderect(joueur.rect): # Si la balle entre en collision avec le joueur
+                balle.kill()
+                joueur.mettre_a_jour_score() # Mettre à jour le score du joueur
+                print("Score du joueur :", joueur.score)
+                
             if balle.rect.y > 530:
-                balles.remove(balle for balle in balles)
+                balle.kill()
                 n_nouvelles_balles = random.randint(1, 3)
                 for i in range(n_nouvelles_balles):
-                    balles.add(Balle(screen=ecran))
+                
+                    balles.add(Balle(x=random.randint(20, 400), screen=ecran))
+
+
+                balles.clear(ecran, (0,0,0))    
 
         
             
            
-        pygame.display.update()
+    pygame.display.update()
