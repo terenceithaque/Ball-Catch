@@ -47,7 +47,6 @@ def demander_quitter():
 
 while execution: # Tant que le jeu est en cours d'exécution
     joueur.sauvegarder_score() # On sauvegarde le score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
-    joueur.afficher_score() # Afficher le score du joueur à l'écran
     
 
     touches = pygame.key.get_pressed() # Obtenir toutes les touches pressées par le joueur pendant l'exécution du jeu
@@ -59,6 +58,7 @@ while execution: # Tant que le jeu est en cours d'exécution
         if touches[pygame.K_SPACE]:
             mettre_pause() 
 
+    killed_balls = [] # Liste des balles supprimées du jeu
 
     if not pause: 
         ecran.fill((0,0,0))
@@ -67,35 +67,52 @@ while execution: # Tant que le jeu est en cours d'exécution
         #ecran.fill((0,0,0))          
 
         
-
+        joueur.mettre_a_jour_pos(touches)
+        joueur.draw()  # Dessiner le joueur à l'écran
         
-        for balle in list(balles):
-            balle.clear()
-            joueur.mettre_a_jour_pos(touches)
-            joueur.draw()  # Dessiner le joueur à l'écran
+            #print(list(balles))
+            #balle.clear()
+            
             
             #print(balle)
-
             
-            balle.fall()
-            balle.draw()
+        copie_balles = balles.copy()
+
+        for balle in copie_balles:
+            
+                balle.fall()
+
+                if not balle.en_pos_depart(): # On vérifie si la balle a bougée ou non
+                    balle.draw()
             #ecran.fill((0,0,0))
 
-            if balle.rect.colliderect(joueur.rect): # Si la balle entre en collision avec le joueur
-                balle.kill()
-                joueur.mettre_a_jour_score() # Mettre à jour le score du joueur
-                print("Score du joueur :", joueur.score)
+                    if balle.rect.colliderect(joueur.rect): # Si la balle entre en collision avec le joueur
+                        print("La balle est entrée en collision avec le joueur")
+                        balle.kill()
+                        balles.remove(balle)
+                        joueur.mettre_a_jour_score() # Mettre à jour le score du joueur
+                        print("Score du joueur :", joueur.score)
+                        balles.add(Balle(x=random.randint(20, 400), screen=ecran))
 
-            if balle.rect.y > 530:
-                balle.kill()
-                n_nouvelles_balles = random.randint(1, 3)
+                    if balle.rect.y > 530:
+                        print("La balle est sortie de l'écran")
+                        balle.kill()
+                        balles.remove(balle)
+
+                        if len(balles) == 0:
                 
-                balles.add(Balle(x=random.randint(20, 400), screen=ecran))
+                            balles.add(Balle(x=random.randint(20, 400), screen=ecran))
 
 
-                #balles.clear(ecran, (0,0,0))    
+                #balles.clear(ecran, (0,0,0))
+
+                else:
+                    balle.kill()
+                    balles.remove(balle)
+                    balles.add(Balle(x=random.randint(20, 400), screen=ecran))                
 
         
             
-           
+    joueur.afficher_score() # Afficher le score du joueur à l'écran
+
     pygame.display.flip()

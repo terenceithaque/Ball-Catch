@@ -74,7 +74,7 @@ class Joueur(pygame.sprite.Sprite):
 
         self.screen.blit(score_text, (20, 20))
         self.screen.blit(meilleur_score_text, (20, 40))
-        pygame.display.update()        
+        #pygame.display.update()        
 
 
     def draw(self):

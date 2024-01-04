@@ -22,11 +22,15 @@ class Balle(pygame.sprite.Sprite):
     def fall(self):
         "La balle tombe"
         self.rect.y += self.vitesse
-        print("Position y de la balle :", self.rect.y)
+        #print("Position y de la balle :", self.rect.y)
 
 
     def clear(self):
-        self.screen.fill((0,0,0))    
+        self.screen.fill((0,0,0))
+
+    def en_pos_depart(self):
+        "Vérifier si la balle a bougée ou non"
+        return self.rect.y == self.y         
 
     def draw(self):
         "Dessiner la balle à l'écran"
