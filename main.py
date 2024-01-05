@@ -68,6 +68,7 @@ while execution: # Tant que le jeu est en cours d'exécution
             balles.add(Balle(x=random.randint(joueur.rect.x - 150, joueur.rect.x + 150), screen=ecran))
 
         if evenement.type == quitter_jeu: # Si on intercèpte un évènement "quitter le jeu" pour arrêter la partie après un certain temps:
+            messagebox.showinfo("Le jeu va s'arrêter", "Le jeu est sur le point de s'arrêter afin d'éviter une consommation inutile des ressources de votre ordinateur. Ne vous inquiétez pas, votre progrès va être sauvegardé avant fermeture.")
             joueur.sauvegarder_score_actuel() # On sauvegarde le score actuel du joueur de manière à ce qu'il ne recommence pas de zéro lors de la prochaine partie
             execution = False # On quitte le jeu. Cela permet d'éviter l'utilisation inutile de mémoire.        
 
