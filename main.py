@@ -60,8 +60,8 @@ while execution: # Tant que le jeu est en cours d'exécution
         if evenement.type == pygame.QUIT or touches[pygame.K_ESCAPE]: # Si le joueur veut quitter le jeu
             demander_quitter() # On demande au joueur de confirmer la fin de la partie
 
-        if evenement.type == ajouter_balle and pause == False: 
-            balles.add(Balle(x=random.randint(20, 700), screen=ecran))    
+        if evenement.type == ajouter_balle and pause == False: # Si on intercèpte un évènement "ajouter une balle". La mention "pause == False" évite que des balles apparaissent alors que le jeu est en pause. 
+            balles.add(Balle(x=random.randint(joueur.rect.x - 150, joueur.rect.x + 150), screen=ecran))    
 
         if touches[pygame.K_SPACE]:
             mettre_pause() 
