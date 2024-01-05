@@ -48,10 +48,14 @@ def demander_quitter():
         execution = False # Alors on arrête l'exécution du jeu
 
 
-ajouter_balle = pygame.USEREVENT + 1        
+ajouter_balle = pygame.USEREVENT + 1 # Evènement pour ajouter une balle
+quitter_jeu = pygame.USEREVENT + 2 # Evènement pour quitter le jeu. Il nous servira à quitter le jeu après un certain laps de temps
+
+temps_max_jeu = 15 * 60000 # Temps maximum d'une partie converti en millisecondes. Ici, ce temps correspont à 15 minutes.
+pygame.time.set_timer(quitter_jeu, temps_max_jeu)
 
 while execution: # Tant que le jeu est en cours d'exécution
-    joueur.sauvegarder_score() # On sauvegarde le score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
+    joueur.sauvegarder_meilleur_score() # On sauvegarde le meilleur score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
     
 
     touches = pygame.key.get_pressed() # Obtenir toutes les touches pressées par le joueur pendant l'exécution du jeu
@@ -61,7 +65,11 @@ while execution: # Tant que le jeu est en cours d'exécution
             demander_quitter() # On demande au joueur de confirmer la fin de la partie
 
         if evenement.type == ajouter_balle and pause == False: # Si on intercèpte un évènement "ajouter une balle". La mention "pause == False" évite que des balles apparaissent alors que le jeu est en pause. 
-            balles.add(Balle(x=random.randint(joueur.rect.x - 150, joueur.rect.x + 150), screen=ecran))    
+            balles.add(Balle(x=random.randint(joueur.rect.x - 150, joueur.rect.x + 150), screen=ecran))
+
+        if evenement.type == quitter_jeu: # Si on intercèpte un évènement "quitter le jeu" pour arrêter la partie après un certain temps:
+            joueur.sauvegarder_score_actuel() # On sauvegarde le score actuel du joueur de manière à ce qu'il ne recommence pas de zéro lors de la prochaine partie
+            execution = False # On quitte le jeu. Cela permet d'éviter l'utilisation inutile de mémoire.        
 
         if touches[pygame.K_SPACE]:
             mettre_pause() 

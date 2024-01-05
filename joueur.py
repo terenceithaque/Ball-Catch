@@ -18,16 +18,24 @@ class Joueur(pygame.sprite.Sprite):
 
         self.screen = screen # Surface sur laquelle on affichera le joueur
 
-        self.score = 0 # Score actuel du joueur
 
-        self.fichier_score = "score.txt" # Fichier dans lequel le score du joueur est enregistré
 
-        rf = open(self.fichier_score, "r") # Ouvrir le fichier du score en lecture
+        self.fichier_meilleur_score = "score_max.txt" # Fichier dans lequel le meileur score du joueur est enregistré
+        self.fichier_score = "score.txt" # Fichier dans lequel le score actuel du joueur est enregistré
+
+        f_meilleur_score = open(self.fichier_meilleur_score, "r") # Ouvrir le fichier du meilleur score en lecture
         try:
-            self.meilleur_score = int(rf.read()) # Meilleur score du joueur
+            self.meilleur_score = int(f_meilleur_score.read()) # Meilleur score du joueur
 
         except ValueError:
-            self.meilleur_score = 0    
+            self.meilleur_score = 0 
+
+        f_score = open(self.fichier_score, "r") # Ouvrir le fichier contenant le score actuel en lecture
+        try:
+            self.score = int(f_score.read())
+
+        except ValueError:
+            self.score = 0           
         
 
         self.score_font = pygame.font.Font(None, 36)
@@ -56,11 +64,17 @@ class Joueur(pygame.sprite.Sprite):
             self.meilleur_score = self.score # Dans ce cas on met à jour le meilleur score
             print("Meilleur score mis à jour !")
 
-    def sauvegarder_score(self):
+    def sauvegarder_meilleur_score(self):
         "Sauvegarder le meilleur score du joueur dans un fichier texte"
-        with open(self.fichier_score, "w") as wf: # Ouvrir le fichier texte contenant le score en écriture
+        with open(self.fichier_meilleur_score, "w") as wf: # Ouvrir le fichier texte contenant le score en écriture
             wf.write(str(self.meilleur_score)) # Ecrire le meilleur score du joueur dans le fichier texte
             wf.close()
+
+    def sauvegarder_score_actuel(self):
+        "Sauvegarder le score actuel du joueur dans un fichier texte"
+        with open(self.fichier_score, "w") as wf:
+            wf.write(str(self.score))
+            wf.close()        
 
 
     def afficher_score(self):
