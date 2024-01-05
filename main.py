@@ -4,6 +4,8 @@ from joueur import * # Importer toutes les propriétés provenant du fichier jou
 from balle import * # Importer toutes les propriétés provenant du fichier balle.py
 from tkinter import messagebox
 import random
+from threading import Thread
+
 pygame.init() # Initialiser pygame
 
 
@@ -30,13 +32,13 @@ def mettre_pause():
     if pause == False: # Si le jeu n'est pas en pause
         pause_font = pygame.font.Font(None, 30)
         texte_pause = "Pause ! (Touche Espace pour reprendre)"
-        pause = True 
-        ecran.blit(pause_font.render(texte_pause, True, (255, 255, 255)), (0,50))
+        pause = True # On met le jeu en pause, donc on change la valeur de la variable pause pour True
+        ecran.blit(pause_font.render(texte_pause, True, (255, 255, 255)), (0,70))
         pygame.display.update()
         
 
-    else:
-        pause = False   
+    else: # Si le jeu est déjà en pause
+        pause = False   # Dans ce cas on reprend la partie, on met donc la variable pause sur False
 
 def demander_quitter():
     "Demander au joueur s'il souhaite quitter le jeu"
@@ -44,6 +46,9 @@ def demander_quitter():
     if quit == "yes": # Si le joueur clique sur "Oui"
         global execution
         execution = False # Alors on arrête l'exécution du jeu
+
+
+ajouter_balle = pygame.USEREVENT + 1        
 
 while execution: # Tant que le jeu est en cours d'exécution
     joueur.sauvegarder_score() # On sauvegarde le score du joueur à chaque frame pour pouvoir le récupérer en cas de besoin
@@ -54,6 +59,9 @@ while execution: # Tant que le jeu est en cours d'exécution
     for evenement in pygame.event.get(): # On intercèpte tous les évènements qui ont lieu pendant l'exécution du jeu
         if evenement.type == pygame.QUIT or touches[pygame.K_ESCAPE]: # Si le joueur veut quitter le jeu
             demander_quitter() # On demande au joueur de confirmer la fin de la partie
+
+        if evenement.type == ajouter_balle and pause == False: 
+            balles.add(Balle(x=random.randint(20, 700), screen=ecran))    
 
         if touches[pygame.K_SPACE]:
             mettre_pause() 
@@ -76,9 +84,9 @@ while execution: # Tant que le jeu est en cours d'exécution
             
             #print(balle)
             
-        copie_balles = balles.copy()
+       
 
-        for balle in copie_balles:
+        for balle in balles:
             
                 balle.fall()
 
@@ -92,7 +100,7 @@ while execution: # Tant que le jeu est en cours d'exécution
                         balles.remove(balle)
                         joueur.mettre_a_jour_score() # Mettre à jour le score du joueur
                         print("Score du joueur :", joueur.score)
-                        balles.add(Balle(x=random.randint(20, 400), screen=ecran))
+                        pygame.time.set_timer(ajouter_balle, 500)
 
                     if balle.rect.y > 530:
                         print("La balle est sortie de l'écran")
@@ -100,8 +108,7 @@ while execution: # Tant que le jeu est en cours d'exécution
                         balles.remove(balle)
 
                         if len(balles) == 0:
-                
-                            balles.add(Balle(x=random.randint(20, 400), screen=ecran))
+                            pygame.time.set_timer(ajouter_balle, 500)
 
 
                 #balles.clear(ecran, (0,0,0))
@@ -109,7 +116,7 @@ while execution: # Tant que le jeu est en cours d'exécution
                 else:
                     balle.kill()
                     balles.remove(balle)
-                    balles.add(Balle(x=random.randint(20, 400), screen=ecran))                
+                    pygame.time.set_timer(ajouter_balle, 500)              
 
         
             
